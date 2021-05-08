@@ -59,5 +59,9 @@ namespace Study_CSharp.复制文件链接
                 Directory.CreateDirectory(dirct);
             }
         }
+        public void CpFileLink(string fileName)
+        {
+
+        }
     }
 }
