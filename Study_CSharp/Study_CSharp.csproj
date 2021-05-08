@@ -115,6 +115,7 @@
     <Compile Include="TreeViewOwnerDraw.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="复制文件链接\CreateFileShortcut.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="NewFolder1\Left\LeftBasis.resx">

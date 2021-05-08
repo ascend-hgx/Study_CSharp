@@ -357,6 +357,7 @@ namespace PublicFunctionLib
 
     public class MyFile
     {
+        bool Debug = true;
         // protected 继承的对象可以调用，但外部不能访问
         protected IListDs<string> list = new LinkList<string>();
         protected string FileName = "MyFile";
@@ -524,12 +525,13 @@ namespace PublicFunctionLib
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        public string syncRead(string fileName = "")
+        public string syncRead(string fileName = "", bool isTxt = true)
         {
             // 如果没输入文件名，则文件名文初始化文件名
             if (fileName == "") { fileName = FileName; }
 
-            fileName += ".txt";
+            if(isTxt)
+                fileName += ".txt";
 
             try
             {   // Open the text file using a stream reader.
@@ -590,7 +592,46 @@ namespace PublicFunctionLib
 
             return list;
         }
+        public List<string> Read(string fileName = "", string address = "")
+        {
+            List<string> thisList = new List<string>();
+            // 如果没输入文件名，则文件名文初始化文件名
+            if (fileName == "") { fileName = FileName; }
 
+            StringBuilder strBuider = new StringBuilder();
+            strBuider.Append(address);
+            strBuider.Append(fileName);
+            string file = syncRead(strBuider.ToString(),false);
+
+            if (file.Length > 0)
+            {
+                StringBuilder strBdr = new StringBuilder();
+
+                for (int i = 0; i < file.Length - 1; i++)
+                {
+                    // 每到结尾则添加
+                    if (file[i] != '\r' && file[i + 1] != '\n')
+                    {
+                        strBdr.Append(file[i]);
+                    }
+                    else
+                    {
+                        thisList.Add(Convert.ToString(strBdr));
+                        strBdr.Clear();
+                        i++;
+                    }
+                }
+                if (strBdr.Length > 0)
+                {
+                    int i = file.Length - 1;
+                    strBdr.Append(file[i]);
+                    thisList.Add(Convert.ToString(strBdr));
+                    strBdr.Clear();
+                }
+            }
+
+            return thisList;
+        }
         /* 读取显示当前目录有哪些文件（需要用到下面的changeStr和haveString）
          * File类创建、删除、读写文件
          * Directory类创建、删除、读写文件夹

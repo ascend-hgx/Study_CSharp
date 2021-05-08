@@ -30,6 +30,7 @@ using System.Windows.Forms;             // 用来显示Form窗体
 
 using System.Runtime.InteropServices;   // 用来设定数据类型
 using System.Collections.Specialized;
+using Study_CSharp.复制文件链接;
 
 namespace study
 {
@@ -40,9 +41,8 @@ namespace study
             //GetSocket socket = new GetSocket();
             //socket.test();
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            CreateFileShortcut createFileShortcut = new CreateFileShortcut();
+            createFileShortcut.Test();
 
             Console.Read();
         }
