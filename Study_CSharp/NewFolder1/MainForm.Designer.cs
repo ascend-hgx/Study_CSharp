@@ -71,8 +71,8 @@
             // Min
             // 
             this.Min.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Min.Image = global::study.Port._563697;
-            this.Min.InitialImage = global::study.Port.关闭按钮;
+            this.Min.Image = global::Study_CSharp.Port._563697;
+            this.Min.InitialImage = global::Study_CSharp.Port.关闭按钮;
             this.Min.Location = new System.Drawing.Point(930, 12);
             this.Min.Name = "Min";
             this.Min.Size = new System.Drawing.Size(37, 36);
@@ -84,9 +84,9 @@
             // Max
             // 
             this.Max.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Max.BackgroundImage = global::study.Port.关闭按钮;
-            this.Max.Image = global::study.Port._11830671;
-            this.Max.InitialImage = global::study.Port.关闭按钮;
+            this.Max.BackgroundImage = global::Study_CSharp.Port.关闭按钮;
+            this.Max.Image = global::Study_CSharp.Port._11830671;
+            this.Max.InitialImage = global::Study_CSharp.Port.关闭按钮;
             this.Max.Location = new System.Drawing.Point(973, 12);
             this.Max.Name = "Max";
             this.Max.Size = new System.Drawing.Size(37, 36);
@@ -98,9 +98,9 @@
             // Close
             // 
             this.Close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Close.BackgroundImage = global::study.Port.关闭按钮;
-            this.Close.Image = global::study.Port.关闭按钮;
-            this.Close.InitialImage = global::study.Port.关闭按钮;
+            this.Close.BackgroundImage = global::Study_CSharp.Port.关闭按钮;
+            this.Close.Image = global::Study_CSharp.Port.关闭按钮;
+            this.Close.InitialImage = global::Study_CSharp.Port.关闭按钮;
             this.Close.Location = new System.Drawing.Point(1016, 12);
             this.Close.Name = "Close";
             this.Close.Size = new System.Drawing.Size(37, 36);

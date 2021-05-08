@@ -32,12 +32,12 @@ namespace study.NewFolder1.Right.Basic
         {
             if (show)
             {
-                this.pictureBox1.Image = global::study.Properties.Resources._1073328;
+                this.pictureBox1.Image = global::Study_CSharp.Properties.Resources._1073328;
                 show = false;
             }
             else
             {
-                this.pictureBox1.Image = global::study.Properties.Resources._1073317;
+                this.pictureBox1.Image = global::Study_CSharp.Properties.Resources._1073317;
                 show = true;
             }
             Changed(show, this.bar.Text);

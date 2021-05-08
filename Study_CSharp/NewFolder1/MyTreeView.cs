@@ -40,18 +40,18 @@ namespace WindowsFormsApplication9
             else
             {
                 e.Graphics.FillRectangle(new SolidBrush(TreeBackColor), e.Bounds);
-                Bitmap bitmap = new Bitmap(global::study.Properties.Resources._20150502183904);
+                Bitmap bitmap = new Bitmap(global::Study_CSharp.Properties.Resources._20150502183904);
                 e.Graphics.DrawImage(bitmap, e.Bounds);
             }
 
             //节点头图标绘制
             if (e.Node.IsExpanded)
             {
-                e.Graphics.DrawImage(global::study.Properties.Resources.tree_NodeExpend, e.Node.Bounds.X - 16, e.Node.Bounds.Y + 6);
+                e.Graphics.DrawImage(global::Study_CSharp.Properties.Resources.tree_NodeExpend, e.Node.Bounds.X - 16, e.Node.Bounds.Y + 6);
             }
             else if (e.Node.IsExpanded == false && e.Node.Nodes.Count > 0)          // 有CheckBoxs的话这里是26
             {
-                e.Graphics.DrawImage(global::study.Properties.Resources.tree_NodeCollaps, e.Node.Bounds.X - 16, e.Node.Bounds.Y + 6);
+                e.Graphics.DrawImage(global::Study_CSharp.Properties.Resources.tree_NodeCollaps, e.Node.Bounds.X - 16, e.Node.Bounds.Y + 6);
             }
 
             //文本绘制

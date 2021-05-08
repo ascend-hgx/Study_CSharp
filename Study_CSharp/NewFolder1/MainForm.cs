@@ -183,13 +183,13 @@ namespace study.NewFolder1
             if (!isMax)
             {
                 isMax = true;
-                this.Max.Image = study.Port._1183068;
+                this.Max.Image = Study_CSharp.Port._1183068;
                 this.WindowState = FormWindowState.Maximized;
             }
             else
             {
                 isMax = false;
-                this.Max.Image = study.Port._11830671;
+                this.Max.Image = Study_CSharp.Port._11830671;
                 this.WindowState = FormWindowState.Normal;
             }
         }

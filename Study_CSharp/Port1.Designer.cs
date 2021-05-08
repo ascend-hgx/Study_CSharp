@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace study {
+namespace Study_CSharp {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace study {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("study.Port", typeof(Port).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Study_CSharp.Port", typeof(Port).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

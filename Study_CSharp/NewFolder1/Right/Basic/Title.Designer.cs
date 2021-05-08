@@ -47,7 +47,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBox1.Image = global::study.Properties.Resources._1073328;
+            this.pictureBox1.Image = global::Study_CSharp.Properties.Resources._1073328;
             this.pictureBox1.InitialImage = null;
             this.pictureBox1.Location = new System.Drawing.Point(610, 6);
             this.pictureBox1.Name = "pictureBox1";
