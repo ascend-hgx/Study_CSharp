@@ -41,8 +41,11 @@ namespace study
             //GetSocket socket = new GetSocket();
             //socket.test();
 
-            CreateFileShortcut createFileShortcut = new CreateFileShortcut();
-            createFileShortcut.Test();
+            MyExcel myExcel = new MyExcel();
+            List<string> list = new List<string>();
+            list.Add("hello");
+            list.Add("world");
+            //myExcel.WriteRow(2, list, )
 
             Console.Read();
         }

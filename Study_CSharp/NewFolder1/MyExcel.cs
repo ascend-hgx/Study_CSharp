@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
+using Word = Microsoft.Office.Interop.Word;
 
 namespace study.NewFolder1
 {
@@ -13,6 +14,7 @@ namespace study.NewFolder1
         List<List<string>> AllData = new List<List<string>>();
         List<string> ColumnsName = new List<string>();
 
+        public MyExcel() { }
         public MyExcel(string fileName, string sheetName)
         {
             if (fileName == null || fileName == "")
@@ -94,6 +96,19 @@ namespace study.NewFolder1
             System.GC.Collect(generation);
         }
 
+        // 写入第几行数据，返回是否写入成功
+        public bool WriteRow(int row, List<string> writeList, Microsoft.Office.Interop.Excel.Worksheet workSheet)
+        {
+            if(workSheet == null)
+            {
+                return false;
+            }
+            for(int i = 0; i < writeList.Count; i++)
+            {
+                workSheet.Cells[i + 1][row] = writeList[i];
+            }
+            return true;
+        }
         // 读取所有参数
         public List<List<string>> ReadAllData()
         {
