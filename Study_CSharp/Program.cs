@@ -40,8 +40,17 @@ namespace study
         {
             //GetSocket socket = new GetSocket();
             //socket.test();
-
-            MyExcel myExcel = new MyExcel();
+            
+            MyExcel myExcel = new MyExcel("test.xlsx");
+            Thread t = new Thread((ThreadStart)(() =>
+                {
+                    // 将出现这个异常的语句放到这里面
+                    myExcel.GetDataFromExcelByCom(true);
+                }
+            ));
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
+            t.Join();
             List<string> list = new List<string>();
             list.Add("hello");
             list.Add("world");

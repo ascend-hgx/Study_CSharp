@@ -6,15 +6,47 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 using Word = Microsoft.Office.Interop.Word;
+using System.IO;
+using System.Data;
 
 namespace study.NewFolder1
 {
     class MyExcel
     {
-        List<List<string>> AllData = new List<List<string>>();
-        List<string> ColumnsName = new List<string>();
+        List<List<string>> allData = new List<List<string>>();
+        List<string> columnsName = new List<string>();
+        Excel.Workbook workbook = null;
 
+        ~MyExcel()
+        {
+            if (allData != null)
+                allData.Clear();
+            if (columnsName != null)
+                columnsName.Clear();
+            if(workbook != null)
+                workbook.Close();
+        }
         public MyExcel() { }
+        public MyExcel(string fileName)
+        {
+            Excel.Application app = new Excel.Application();
+            string file = Directory.GetCurrentDirectory() + @"\" + fileName;
+
+            if (app == null)
+            {
+                MessageBox.Show("Can't access excel");
+                return;
+            }
+
+            try
+            {
+                workbook = app.Application.Workbooks.Open(file, null, false);
+            }
+            catch
+            {
+                MessageBox.Show("Failed to open the excel");
+            }
+        }
         public MyExcel(string fileName, string sheetName)
         {
             if (fileName == null || fileName == "")
@@ -37,6 +69,7 @@ namespace study.NewFolder1
             catch
             {
                 MessageBox.Show("Failed to open the excel");
+                return;
             }
 
             sheet = (Excel.Worksheet)workbook.Worksheets[sheetName];
@@ -49,7 +82,7 @@ namespace study.NewFolder1
                 range = sheet.Range[sheet.Cells[1,i], sheet.Cells[1, i]];
                 if(range.Value != null && range.Value != "")
                 {
-                    ColumnsName.Add(range.Value.ToString());
+                    columnsName.Add(range.Value.ToString());
                 }
             }
 
@@ -86,7 +119,7 @@ namespace study.NewFolder1
                     }
                 }
                 if (ok)
-                    AllData.Add(list);
+                    allData.Add(list);
             }
 
             // 垃圾回收，不用这个无法释放Excel
@@ -97,7 +130,7 @@ namespace study.NewFolder1
         }
 
         // 写入第几行数据，返回是否写入成功
-        public bool WriteRow(int row, List<string> writeList, Microsoft.Office.Interop.Excel.Worksheet workSheet)
+        public bool WriteRow(int row, List<string> writeList, Microsoft.Office.Interop.Excel.Worksheet workSheet = null)
         {
             if(workSheet == null)
             {
@@ -110,22 +143,22 @@ namespace study.NewFolder1
             return true;
         }
         // 读取所有参数
-        public List<List<string>> ReadAllData()
+        public List<List<string>> ReadallData()
         {
-            return AllData;
+            return allData;
         }
 
         // 读取一行
         public bool ReadRow(int row, List<string> backList)
         {
-            if (row > AllData.Count)
+            if (row > allData.Count)
                 return false;
 
             row--;
             backList.Clear();
-            for(int i = 0; i < AllData[row].Count; i++)
+            for(int i = 0; i < allData[row].Count; i++)
             {
-                backList.Add(AllData[row][i]);
+                backList.Add(allData[row][i]);
             }
             return true;
         }
@@ -133,17 +166,17 @@ namespace study.NewFolder1
         // 读取一列
         public bool ReadColumn(int column, List<string> backList)
         {
-            if (column > ColumnsName.Count)
+            if (column > columnsName.Count)
                 return false;
 
             column--;
             backList.Clear();
-            for(int i = 0; i < AllData.Count; i++)
+            for(int i = 0; i < allData.Count; i++)
             {
-                if (AllData[i][column] == null)
+                if (allData[i][column] == null)
                     backList.Add("");
                 else
-                    backList.Add(AllData[i][column]);
+                    backList.Add(allData[i][column]);
             }
             return true;
         }
@@ -154,9 +187,9 @@ namespace study.NewFolder1
                 return false;
 
             int column = -1;
-            for(int i = 0; i < ColumnsName.Count; i++)
+            for(int i = 0; i < columnsName.Count; i++)
             {
-                if(columnName == ColumnsName[i])
+                if(columnName == columnsName[i])
                 {
                     column = i;
                     break;
@@ -166,15 +199,84 @@ namespace study.NewFolder1
                 return false;
 
             backList.Clear();
-            for(int i = 0; i < AllData.Count; i++)
+            for(int i = 0; i < allData.Count; i++)
             {
-                if (AllData[i][column] == null)
+                if (allData[i][column] == null)
                     backList.Add("");
                 else
-                    backList.Add(AllData[i][column]);
+                    backList.Add(allData[i][column]);
             }
 
             return true;
+        }
+
+        public DataTable GetDataFromExcelByCom(bool hasTitle = false)
+        {
+            OpenFileDialog openFile = new OpenFileDialog();
+            openFile.Filter = "Excel(*.xlsx)|*.xlsx|Excel(*.xls)|*.xls";
+            openFile.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            openFile.Multiselect = false;
+            if (openFile.ShowDialog() == DialogResult.Cancel)
+                return null;
+            var excelFilePath = openFile.FileName;
+
+            Excel.Application app = new Excel.Application();
+            Excel.Sheets sheets;
+            object oMissiong = System.Reflection.Missing.Value;
+            Excel.Workbook workbook = null;
+            DataTable dt = new DataTable();
+
+            try
+            {
+                if (app == null) return null;
+                workbook = app.Workbooks.Open(excelFilePath, oMissiong, oMissiong, oMissiong, oMissiong, oMissiong,
+                    oMissiong, oMissiong, oMissiong, oMissiong, oMissiong, oMissiong, oMissiong, oMissiong, oMissiong);
+                sheets = workbook.Worksheets;
+
+                //将数据读入到DataTable中
+                Excel.Worksheet worksheet = (Excel.Worksheet)sheets.get_Item(1);//读取第一张表  
+                if (worksheet == null) return null;
+
+                int iRowCount = worksheet.UsedRange.Rows.Count;
+                int iColCount = worksheet.UsedRange.Columns.Count;
+                //生成列头
+                for (int i = 0; i < iColCount; i++)
+                {
+                    var name = "column" + i;
+                    if (hasTitle)
+                    {
+                        var txt = ((Excel.Range)worksheet.Cells[1, i + 1]).Text.ToString();
+                        if (!string.IsNullOrWhiteSpace(txt)) name = txt;
+                    }
+                    while (dt.Columns.Contains(name)) name = name + "_1";//重复行名称会报错。
+                    dt.Columns.Add(new DataColumn(name, typeof(string)));
+                }
+                //生成行数据
+                Excel.Range range;
+                int rowIdx = hasTitle ? 2 : 1;
+                for (int iRow = rowIdx; iRow <= iRowCount; iRow++)
+                {
+                    DataRow dr = dt.NewRow();
+                    for (int iCol = 1; iCol <= iColCount; iCol++)
+                    {
+                        range = (Excel.Range)worksheet.Cells[iRow, iCol];
+                        dr[iCol - 1] = (range.Value2 == null) ? "" : range.Text.ToString();
+                    }
+                    dt.Rows.Add(dr);
+                }
+                return dt;
+            }
+            catch { return null; }
+            finally
+            {
+                workbook.Close(false, oMissiong, oMissiong);
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(workbook);
+                workbook = null;
+                app.Workbooks.Close();
+                app.Quit();
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(app);
+                app = null;
+            }
         }
     }
 }

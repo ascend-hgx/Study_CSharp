@@ -11,7 +11,7 @@ using PublicFunctionLib;
 
 namespace Study_CSharp.复制文件链接
 {
-    class CreateFileShortcut
+    class CreateFileShortCut
     {
         bool debug = true;
         MyFile myFile = new MyFile();
