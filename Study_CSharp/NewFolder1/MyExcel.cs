@@ -8,6 +8,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 using Word = Microsoft.Office.Interop.Word;
 using System.IO;
 using System.Data;
+using System.Data.OleDb;
 
 namespace study.NewFolder1
 {
@@ -15,7 +16,7 @@ namespace study.NewFolder1
     {
         List<List<string>> allData = new List<List<string>>();
         List<string> columnsName = new List<string>();
-        Excel.Workbook workbook = null;
+        Excel.Workbook Workbook = null;
 
         ~MyExcel()
         {
@@ -23,8 +24,8 @@ namespace study.NewFolder1
                 allData.Clear();
             if (columnsName != null)
                 columnsName.Clear();
-            if(workbook != null)
-                workbook.Close();
+            if(Workbook != null)
+                Workbook.Close();
         }
         public MyExcel() { }
         public MyExcel(string fileName)
@@ -40,7 +41,7 @@ namespace study.NewFolder1
 
             try
             {
-                workbook = app.Application.Workbooks.Open(file, null, false);
+                Workbook = app.Application.Workbooks.Open(file, null, false);
             }
             catch
             {
@@ -276,6 +277,63 @@ namespace study.NewFolder1
                 app.Quit();
                 System.Runtime.InteropServices.Marshal.ReleaseComObject(app);
                 app = null;
+            }
+        }
+
+
+        /// <summary>
+        /// 读取Excel中数据
+        /// </summary>
+        /// <param name="strExcelPath"></param>
+        /// <param name="tableName"></param>
+        /// <returns></returns>
+        public DataTable GetExcelTableByOleDB(string strExcelPath, string tableName)
+        {
+            try
+            {
+                DataTable dtExcel = new DataTable();
+                //数据表
+                DataSet ds = new DataSet();
+                //获取文件扩展名
+                string strExtension = System.IO.Path.GetExtension(strExcelPath);
+                string strFileName = System.IO.Path.GetFileName(strExcelPath);
+                //Excel的连接
+                OleDbConnection objConn = null;
+                switch (strExtension)
+                {
+                    case ".xls":
+                        objConn = new OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + strExcelPath + ";" + "Extended Properties=\"Excel 8.0;HDR=yes;IMEX=1;\"");
+                        break;
+                    case ".xlsx":
+                        objConn = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + strExcelPath + ";" + "Extended Properties=\"Excel 12.0;HDR=yes;IMEX=1;\"");//此连接可以操作.xls与.xlsx文件 (支持Excel2003 和 Excel2007 的连接字符串)  备注： "HDR=yes;"是说Excel文件的第一行是列名而不是数，"HDR=No;"正好与前面的相反。"IMEX=1 "如果列中的数据类型不一致，使用"IMEX=1"可必免数据类型冲突。 
+                        break;
+                    default:
+                        objConn = null;
+                        break;
+                }
+                if (objConn == null)
+                {
+                    return null;
+                }
+                objConn.Open();
+                //获取Excel中所有Sheet表的信息
+                //System.Data.DataTable schemaTable = objConn.GetOleDbSchemaTable(System.Data.OleDb.OleDbSchemaGuid.Tables, null);
+                //获取Excel的第一个Sheet表名
+                // string tableName1 = schemaTable.Rows[0][2].ToString().Trim();
+                string strSql = "select * from [" + tableName + "$]";
+                //获取Excel指定Sheet表中的信息
+                OleDbCommand objCmd = new OleDbCommand(strSql, objConn);
+                OleDbDataAdapter myData = new OleDbDataAdapter(strSql, objConn);
+                myData.Fill(ds, tableName);//填充数据
+                objConn.Close();
+                //dtExcel即为excel文件中指定表中存储的信息
+                dtExcel = ds.Tables[tableName];
+                return dtExcel;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message + "\r\n" + ex.StackTrace);
+                return null;
             }
         }
     }
