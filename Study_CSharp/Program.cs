@@ -40,20 +40,28 @@ namespace study
         {
             //GetSocket socket = new GetSocket();
             //socket.test();
-            
-            MyExcel myExcel = new MyExcel("test.xlsx");
-            Thread t = new Thread((ThreadStart)(() =>
-                {
-                    // 将出现这个异常的语句放到这里面
-                    myExcel.GetDataFromExcelByCom(true);
-                }
-            ));
-            t.SetApartmentState(ApartmentState.STA);
-            t.Start();
-            t.Join();
-            List<string> list = new List<string>();
-            list.Add("hello");
-            list.Add("world");
+
+            MyExcel myExcel = new MyExcel();
+            DataTable dataTable = myExcel.GetExcelTableByOleDB("test.xlsx", "Sheet1");
+            Console.WriteLine("Count : " + dataTable.Rows.Count);
+            Console.WriteLine("Sheet name :" + dataTable.TableName);
+            for (int i = 0; i < dataTable.Rows.Count; i++)
+            {
+                Console.WriteLine(dataTable.Rows[i][0].ToString());
+            }
+            //MyExcel myExcel = new MyExcel("test.xlsx", "Sheet1");
+            //Thread t = new Thread((ThreadStart)(() =>
+            //    {
+            //        // 将出现这个异常的语句放到这里面
+            //        myExcel.GetDataFromExcelByCom(true);
+            //    }
+            //));
+            //t.SetApartmentState(ApartmentState.STA);
+            //t.Start();
+            //t.Join();
+            //List<string> list = new List<string>();
+            //list.Add("hello");
+            //list.Add("world");
             //myExcel.WriteRow(2, list, )
 
             Console.Read();
